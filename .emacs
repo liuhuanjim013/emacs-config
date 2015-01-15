@@ -157,6 +157,9 @@
 (setq auto-mode-alist 
       (append '((".*\\.modules\\'" . xml-mode))
               auto-mode-alist))
+(setq auto-mode-alist
+      (append '((".*\\.json\\'" . javascript-mode))
+              auto-mode-alist))
 ; set tab width to 4 spaces
 
 
