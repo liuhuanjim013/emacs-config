@@ -798,3 +798,52 @@
 ;(require 'auto-complete-config)
 ;(add-to-list 'ac-dictionary-directories "/var/www/.emacs-lisp/ac-dict")
 ;(ac-config-default)
+
+;; Setup for Flymake code checking.
+(add-to-list 'load-path "~/emacs-config/")
+(require 'flymake)
+(load-library "flymake-cursor")
+;(setq flymake-log-level 3)
+
+;; Script that flymake uses to check code. This script must be
+;; present in the system path.
+(setq pycodechecker "pycheckers")
+
+(when (load "flymake" t)
+  (defun flymake-pycodecheck-init ()
+    (let* ((temp-file (flymake-init-create-temp-buffer-copy
+                       'flymake-create-temp-inplace))
+           (local-file (file-relative-name
+                        temp-file
+                        (file-name-directory buffer-file-name))))
+      (list pycodechecker (list local-file))))
+  (add-to-list 'flymake-allowed-file-name-masks '("\\.py\\'" flymake-pycodecheck-init)))
+
+(add-hook 'python-mode-hook
+          (lambda ()
+            ; Activate flymake unless buffer is a tmp buffer for the interpreter
+            (unless (eq buffer-file-name nil) (flymake-mode t)) ; this should fix your problem
+            ;; Bind a few keys for navigating errors
+            (local-set-key (kbd "C-c w") 'show-fly-err-at-point) ; remove these if you want
+            (local-set-key (kbd "M-n") 'flymake-goto-next-error)
+            (local-set-key (kbd "M-p") 'flymake-goto-prev-error)))
+
+; Remove trailing whitespace manually by typing C-t C-w.
+(add-hook 'python-mode-hook
+          (lambda ()
+            (local-set-key (kbd "C-t C-w")
+                           'delete-trailing-whitespace)))
+
+; Automatically remove trailing whitespace when file is saved.
+(add-hook 'python-mode-hook
+      (lambda()
+        (add-hook 'local-write-file-hooks
+              '(lambda()
+                 (save-excursion
+                   (delete-trailing-whitespace))))))
+
+;; Use M-SPC (use ALT key) to make sure that words are separated by
+;; just one space. Use C-x C-o to collapse a set of empty lines
+;; around the cursor to one empty line. Useful for deleting all but
+;; one blank line at end of file. To do this go to end of file (M->)
+;; and type C-x C-o.
