@@ -850,3 +850,8 @@
 ;; around the cursor to one empty line. Useful for deleting all but
 ;; one blank line at end of file. To do this go to end of file (M->)
 ;; and type C-x C-o.
+
+
+(setq ring-bell-fuction 'ignore)
+(setq bell-volume 0)
+(setq visible-bell 1)
