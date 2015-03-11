@@ -838,12 +838,12 @@
                            'delete-trailing-whitespace)))
 
 ; Automatically remove trailing whitespace when file is saved.
-(add-hook 'python-mode-hook
-      (lambda()
-        (add-hook 'local-write-file-hooks
-              '(lambda()
-                 (save-excursion
-                   (delete-trailing-whitespace))))))
+;; (add-hook 'python-mode-hook
+;;       (lambda()
+;;         (add-hook 'local-write-file-hooks
+;;               '(lambda()
+;;                  (save-excursion
+;;                    (delete-trailing-whitespace))))))
 
 ;; Use M-SPC (use ALT key) to make sure that words are separated by
 ;; just one space. Use C-x C-o to collapse a set of empty lines
